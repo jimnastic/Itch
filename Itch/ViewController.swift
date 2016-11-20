@@ -20,9 +20,9 @@ struct gameState{
 struct gameSettings{
     // set gameplay constants
     static var playingBlind = true //if playingBlind then bubbles are invisible
-    static var initialBubbles = 7 // sets the number of bubbles to add during setup
-    static var timerInterval = 5 // sets the seconds before new bubble spawned
-    static var maxBubbles = 15 // sets the seconds before new bubble spawned
+    static var initialBubbles = 6 // sets the number of bubbles to add during setup
+    static var timerInterval = 10 // sets the seconds before new bubble spawned
+    static var maxBubbles = 12 // sets the seconds before new bubble spawned
     static var bubbleRadius = 50 // size of bubbles
 }
 
@@ -57,9 +57,8 @@ class ViewController: UIViewController {
     func timerTriggered(){
     // timer that triggers regularly. Used to launch new bubbles
         if !gameState.isEndGame {
-            if (bubbleWrap?.bubbles.count)! < gameSettings.maxBubbles {
+            if (bubbleWrap?.count())! < gameSettings.maxBubbles {
                 bubbleWrap?.createBubbles(screenView: self.view, screenSize: screenSize, numBubbles: 1)
-                print("bubble count: \(bubbleWrap?.bubbles.count)")
             }
         }
     }

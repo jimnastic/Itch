@@ -26,7 +26,7 @@ class UIBubble: Bubble {
     init(centerX: Int, centerY: Int, radius: Int, color: UIColor) {
         let height = radius * 2
         let width = radius * 2
-        print("\(centerX) \(centerY)")
+        // print("\(centerX) \(centerY)")
         view = UIView(frame: CGRect(x: centerX, y: centerY, width: width, height:height))
         view.layer.cornerRadius = CGFloat(radius)
         
@@ -35,8 +35,8 @@ class UIBubble: Bubble {
         }
     }
     
-    //pop a bubble
     override func pop(){
+    //pop a bubble
         super.pop()
         
         let systemSoundID: SystemSoundID = 1057 //tick
@@ -51,15 +51,16 @@ class UIBubble: Bubble {
     
     }
     
+    func swipeInto(){
     //swipe across boundary into a bubble
-    func enter(){
         let systemSoundID: SystemSoundID = 1104 //tock sound
         AudioServicesPlaySystemSound (systemSoundID)
     }
     
-    //test if a touch (swipe or tap) is in a bubble 
-    // also tests if this is the first entry into a bubble or previous was outside
+    
     func testTouchInBubble(touchLocation: CGPoint) -> (withinBubble:Bool, enteredBubble:Bool){
+    //test if a touch (swipe or tap) is in a bubble
+    // also tests if this is the first entry into a bubble or previous was outside
         
         if self.isPopped() {
             return (false, false)
@@ -86,9 +87,8 @@ class UIBubble: Bubble {
         }
     }
 
-    //test if touch is within the circle radius
     func isWithinRadius(frame: CGRect, location: CGPoint) -> Bool {
-        // test if location is within oval defined by rect
+    // test if location is within oval defined by rect
     
         let xDist = location.x - frame.origin.x - (frame.width/2)
         let yDist = location.y - frame.origin.y - (frame.height/2)

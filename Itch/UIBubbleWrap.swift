@@ -42,13 +42,19 @@ class UIBubbleWrap {
             centerY -= radius
             
             screenView.addSubview(addBubble(centerX: centerX, centerY: centerY, radius: radius, color: UIColor.red))
+            print("Added! Bubble count: \(count()) at \(centerX), \(centerY)")
         }
+    }
+
+    func count()->Int{
+    //count of bubbles
+        return bubbles.count
     }
 
     
     func isAllPopped()-> Bool{
     //test if all the bubbles are popped
-        if bubbles.count<1 {
+        if count()<1 {
             return true
         } else {
             return false
@@ -67,7 +73,7 @@ class UIBubbleWrap {
         bubble.pop()
         bubble.view.removeFromSuperview()
         let index = bubbles.index(where: {$0===bubble})
-//        print("popping: \(i), \(index)")
+        print("Popped! Bubble count: \(count()). Popped bubble: \(i), \(index)")
         bubbles.remove(at: index!)
         poppedCount += 1
     }
@@ -81,7 +87,7 @@ class UIBubbleWrap {
             let (within, _) = bubble.testTouchInBubble(touchLocation: touchLocation)
             if within == true {
                 popBubble(bubble: bubble, i: i)
-                print("\(i) popped:  within: \(bubble.touchedWithin) entered: \(bubble.touchEntered)")
+                // print("\(i) popped:  within: \(bubble.touchedWithin) entered: \(bubble.touchEntered)")
             }
             i+=1
         }
@@ -95,8 +101,8 @@ class UIBubbleWrap {
         for bubble in (bubbles) {
             let (_, entered) = bubble.testTouchInBubble(touchLocation: touchLocation)
             if entered == true {
-                bubble.enter()
-                print("\(i) entered:  within: \(bubble.touchedWithin) entered: \(bubble.touchEntered)")
+                bubble.swipeInto()
+                // print("\(i) entered:  within: \(bubble.touchedWithin) entered: \(bubble.touchEntered)")
             }
             i+=1
         }
