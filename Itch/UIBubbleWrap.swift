@@ -64,17 +64,26 @@ class UIBubbleWrap {
     
     func reset() {
     //reset the bubblewrap
-        bubbles.removeAll()
+        for bubble in (bubbles) {
+            deleteBubble(bubble: bubble)
+        }
         poppedCount = 0
+//        bubbles.removeAll()
     }
+
     
-    
-    func popBubble(bubble: UIBubble, i: Int){
+    func deleteBubble(bubble: UIBubble) {
         bubble.pop()
         bubble.view.removeFromSuperview()
         let index = bubbles.index(where: {$0===bubble})
-        print("Popped! Bubble count: \(count()). Popped bubble: \(i), \(index)")
         bubbles.remove(at: index!)
+        print("Popped/deleted! Bubble count: \(count()). Popped bubble:\(index)")
+        
+    }
+
+    
+    func popBubble(bubble: UIBubble){
+        deleteBubble(bubble: bubble)
         poppedCount += 1
     }
     
@@ -86,7 +95,7 @@ class UIBubbleWrap {
         for bubble in (bubbles) {
             let (within, _) = bubble.testTouchInBubble(touchLocation: touchLocation)
             if within == true {
-                popBubble(bubble: bubble, i: i)
+                popBubble(bubble: bubble)
                 // print("\(i) popped:  within: \(bubble.touchedWithin) entered: \(bubble.touchEntered)")
             }
             i+=1

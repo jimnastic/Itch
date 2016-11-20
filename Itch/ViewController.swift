@@ -6,6 +6,7 @@
 //  Copyright © 2016 James May. All rights reserved.
 //
 
+// todo: stop timer when background in app delegate
 
 import UIKit
 import AVFoundation
@@ -19,11 +20,12 @@ struct gameState{
 
 struct gameSettings{
     // set gameplay constants
+    static var bubbleRadius = 50 // size of bubbles
     static var playingBlind = true //if playingBlind then bubbles are invisible
     static var initialBubbles = 6 // sets the number of bubbles to add during setup
-    static var timerInterval = 10 // sets the seconds before new bubble spawned
     static var maxBubbles = 12 // sets the seconds before new bubble spawned
-    static var bubbleRadius = 50 // size of bubbles
+    static var timerInterval = 10 // sets the seconds before new bubble spawned
+    static var respawning = false // new bubbles created on timer
 }
 
 
@@ -33,7 +35,7 @@ class ViewController: UIViewController {
     //   handles user interaction
 
     var bubbleWrap: UIBubbleWrap?
-    let screenSize = UIScreen.main.bounds
+    var screenSize = UIScreen.main.bounds
     var gameTimer: Timer!
     
 
@@ -42,18 +44,41 @@ class ViewController: UIViewController {
     
     @IBAction func tappedRestart(_ sender: Any) {
     //if press restart
-        startGame()
-        print("Restarted")
+        startGame(numBubbles: gameSettings.initialBubbles)
     }
+    
     
     override func viewDidLoad() {
     //game loads
         super.viewDidLoad()
         bubbleWrap = UIBubbleWrap() //initialise bubblewrap
-        startGame() //add bubbles to the game and setup game
-        gameTimer = Timer.scheduledTimer(timeInterval: TimeInterval(gameSettings.timerInterval), target: self, selector: #selector(timerTriggered), userInfo: nil, repeats: true)
+        startGame(numBubbles: gameSettings.initialBubbles) //add bubbles to the game and setup game
+        if gameSettings.respawning {
+        // if respawning allowed set a timer to create additional bubbles
+            gameTimer = Timer.scheduledTimer(timeInterval: TimeInterval(gameSettings.timerInterval), target: self, selector: #selector(timerTriggered), userInfo: nil, repeats: true)
+        }
+        print("view did load")
     }
 
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        if UIDevice.current.orientation.isLandscape {
+            print("Landscape")
+        } else {
+            print("Portrait")
+        }
+        if gameState.isEndGame {
+            // print("rotating while end game")
+        } else {
+            screenSize = CGRect(origin: CGPoint(x: 0,y :0), size: size)
+            //print(screenSize)
+            let remainingBubbles = bubbleWrap?.count()
+            cancelGame()
+            startGame(numBubbles: remainingBubbles!)
+        }
+    }
+    
+    
     func timerTriggered(){
     // timer that triggers regularly. Used to launch new bubbles
         if !gameState.isEndGame {
@@ -73,7 +98,7 @@ class ViewController: UIViewController {
                 bubbleWrap?.testIfTouchPopsBubbles(touchLocation: touchlocation)
             }
             if (bubbleWrap?.isAllPopped())! {
-                endGame()
+                endGameSuccessfully()
             }
         }
     }
@@ -88,32 +113,44 @@ class ViewController: UIViewController {
                 bubbleWrap?.testIfTouchCrossesBubbleBoundaries(touchLocation: touchlocation)
             }
             if (bubbleWrap?.isAllPopped())! {
-                endGame()
+                endGameSuccessfully()
             }
         }
     }
 
 
-    func startGame(){
+    func startGame(numBubbles: Int){
         //called to setup the game
         
         gameState.isEndGame = false
         restartButton.isHidden = true
-        bubbleWrap?.reset()  //remove old popped bubbles from previus game
-        bubbleWrap?.createBubbles(screenView: self.view, screenSize: screenSize, numBubbles: gameSettings.initialBubbles)  //create new bubbles
+        bubbleWrap?.createBubbles(screenView: self.view, screenSize: screenSize, numBubbles: numBubbles)  //create new bubbles
         restartButton.superview!.bringSubview(toFront: restartButton)//ensure restart button is in front (z-order) although hidden
+        print("START")
     }
 
     
-    func endGame(){
+    func cancelGame(){
+    //called when game interrupted. e.g. screen rotation
+
+        print("total popped: \(bubbleWrap?.poppedCount)")
+        bubbleWrap?.reset()  //remove old popped bubbles from previus game
+        gameState.isEndGame = true
+        restartButton.isHidden = true
+        print("CANCEL GAME")
+    }
+    
+    
+    func endGameSuccessfully(){
     //called when game over
         let systemSoundID: SystemSoundID = 1325 //fanfare sound
         AudioServicesPlaySystemSound (systemSoundID)
         
+        print("total popped: \(bubbleWrap?.poppedCount)")
+        bubbleWrap?.reset()  //remove old popped bubbles from previus game
         gameState.isEndGame = true
         restartButton.isHidden = false // make restart button visible
-        print("total popped: \(bubbleWrap?.poppedCount)")
-        print("END GAME")
+        print("WIN GAME")
     }
 
     
