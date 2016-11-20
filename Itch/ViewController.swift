@@ -19,7 +19,7 @@ struct gameState{
 
 struct gameSettings{
     // set gameplay constants
-    static var playingBlind = false //if playingBlind then bubbles are invisible
+    static var playingBlind = true //if playingBlind then bubbles are invisible
     static var numBubbles = 7 // sets the number of bubbles to add during setup
 }
 
