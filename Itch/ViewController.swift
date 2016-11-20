@@ -21,7 +21,7 @@ struct gameState{
 struct gameSettings{
     // set gameplay constants
     static var bubbleRadius = 50 // size of bubbles
-    static var playingBlind = true //if playingBlind then bubbles are invisible
+    static var playingBlind = false //if playingBlind then bubbles are invisible
     static var initialBubbles = 6 // sets the number of bubbles to add during setup
     static var maxBubbles = 12 // sets the seconds before new bubble spawned
     static var timerInterval = 10 // sets the seconds before new bubble spawned
