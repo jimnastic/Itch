@@ -20,7 +20,10 @@ struct gameState{
 struct gameSettings{
     // set gameplay constants
     static var playingBlind = true //if playingBlind then bubbles are invisible
-    static var numBubbles = 7 // sets the number of bubbles to add during setup
+    static var initialBubbles = 7 // sets the number of bubbles to add during setup
+    static var timerInterval = 5 // sets the seconds before new bubble spawned
+    static var maxBubbles = 15 // sets the seconds before new bubble spawned
+    static var bubbleRadius = 50 // size of bubbles
 }
 
 
@@ -31,6 +34,7 @@ class ViewController: UIViewController {
 
     var bubbleWrap: UIBubbleWrap?
     let screenSize = UIScreen.main.bounds
+    var gameTimer: Timer!
     
 
     @IBOutlet weak var restartButton: UIButton!
@@ -47,8 +51,20 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         bubbleWrap = UIBubbleWrap() //initialise bubblewrap
         startGame() //add bubbles to the game and setup game
+        gameTimer = Timer.scheduledTimer(timeInterval: TimeInterval(gameSettings.timerInterval), target: self, selector: #selector(timerTriggered), userInfo: nil, repeats: true)
     }
 
+    func timerTriggered(){
+    // timer that triggers regularly. Used to launch new bubbles
+        if !gameState.isEndGame {
+            if (bubbleWrap?.bubbles.count)! < gameSettings.maxBubbles {
+                bubbleWrap?.createBubbles(screenView: self.view, screenSize: screenSize, numBubbles: 1)
+                print("bubble count: \(bubbleWrap?.bubbles.count)")
+            }
+        }
+    }
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent!) {
     //first touch of a sequence of touches. Useed for detecting taps
 
@@ -85,7 +101,7 @@ class ViewController: UIViewController {
         gameState.isEndGame = false
         restartButton.isHidden = true
         bubbleWrap?.reset()  //remove old popped bubbles from previus game
-        bubbleWrap?.createBubbles(screenView: self.view, screenSize: screenSize, numBubbles: gameSettings.numBubbles)  //create new bubbles
+        bubbleWrap?.createBubbles(screenView: self.view, screenSize: screenSize, numBubbles: gameSettings.initialBubbles)  //create new bubbles
         restartButton.superview!.bringSubview(toFront: restartButton)//ensure restart button is in front (z-order) although hidden
     }
 
@@ -97,6 +113,7 @@ class ViewController: UIViewController {
         
         gameState.isEndGame = true
         restartButton.isHidden = false // make restart button visible
+        print("total popped: \(bubbleWrap?.poppedCount)")
         print("END GAME")
     }
 

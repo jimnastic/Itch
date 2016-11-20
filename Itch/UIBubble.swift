@@ -47,6 +47,7 @@ class UIBubble: Bubble {
         if gameSettings.playingBlind == false {
             view.backgroundColor = UIColor.gray
         }
+        
     
     }
     

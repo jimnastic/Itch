@@ -33,7 +33,7 @@ class UIBubbleWrap {
     //create a bunch of bubbles and add them to the screen
         var centerX: Int
         var centerY: Int
-        let radius: Int = 50
+        let radius: Int = gameSettings.bubbleRadius
         
         for _ in 1...numBubbles{
             centerX = Int(arc4random_uniform(UInt32(screenSize.width)))
@@ -48,7 +48,7 @@ class UIBubbleWrap {
     
     func isAllPopped()-> Bool{
     //test if all the bubbles are popped
-        if poppedCount >= bubbles.count {
+        if bubbles.count<1 {
             return true
         } else {
             return false
@@ -62,7 +62,17 @@ class UIBubbleWrap {
         poppedCount = 0
     }
     
-
+    
+    func popBubble(bubble: UIBubble, i: Int){
+        bubble.pop()
+        bubble.view.removeFromSuperview()
+        let index = bubbles.index(where: {$0===bubble})
+//        print("popping: \(i), \(index)")
+        bubbles.remove(at: index!)
+        poppedCount += 1
+    }
+    
+    
     func testIfTouchPopsBubbles(touchLocation: CGPoint){
     //test if latest touch pops any of the bubbles
         
@@ -70,8 +80,7 @@ class UIBubbleWrap {
         for bubble in (bubbles) {
             let (within, _) = bubble.testTouchInBubble(touchLocation: touchLocation)
             if within == true {
-                bubble.pop()
-                poppedCount += 1
+                popBubble(bubble: bubble, i: i)
                 print("\(i) popped:  within: \(bubble.touchedWithin) entered: \(bubble.touchEntered)")
             }
             i+=1
