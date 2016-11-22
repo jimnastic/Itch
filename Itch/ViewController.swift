@@ -17,7 +17,6 @@ class ViewController: UIViewController {
     //   initialises game
     //   handles user interaction
 
-    var bubbleWrap: UIBubbleWrap?
     var screenSize = UIScreen.main.bounds
     var gameTimer: Timer!
     

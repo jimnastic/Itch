@@ -24,3 +24,5 @@ struct gameSettings{
     static var timerInterval = 10 // sets the seconds before new bubble spawned
     static var respawning = false // new bubbles created on timer
 }
+
+var bubbleWrap: UIBubbleWrap?
