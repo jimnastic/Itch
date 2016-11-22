@@ -72,7 +72,7 @@ class ViewController: UIViewController {
         } else {
             screenSize = CGRect(origin: CGPoint(x: 0,y :0), size: size)
             //print(screenSize)
-            let remainingBubbles = bubbleWrap?.count()
+            let remainingBubbles = bubbleWrap?.count
             cancelGame()
             startGame(numBubbles: remainingBubbles!)
         }
@@ -82,7 +82,7 @@ class ViewController: UIViewController {
     func timerTriggered(){
     // timer that triggers regularly. Used to launch new bubbles
         if !gameState.isEndGame {
-            if (bubbleWrap?.count())! < gameSettings.maxBubbles {
+            if (bubbleWrap?.count)! < gameSettings.maxBubbles {
                 bubbleWrap?.createBubbles(screenView: self.view, screenSize: screenSize, numBubbles: 1)
             }
         }

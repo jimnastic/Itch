@@ -42,19 +42,28 @@ class UIBubbleWrap {
             centerY -= radius
             
             screenView.addSubview(addBubble(centerX: centerX, centerY: centerY, radius: radius, color: UIColor.red))
-            print("Added! Bubble count: \(count()) at \(centerX), \(centerY)")
+            print("Added! Bubble count: \(count) at \(centerX), \(centerY)")
         }
     }
 
+    var count:Int {
+        get {
+            return bubbles.count
+        }
+        
+    }
+
+/*
     func count()->Int{
     //count of bubbles
         return bubbles.count
     }
-
+*/
+    
     
     func isAllPopped()-> Bool{
     //test if all the bubbles are popped
-        if count()<1 {
+        if count<1 {
             return true
         } else {
             return false
@@ -77,8 +86,7 @@ class UIBubbleWrap {
         bubble.view.removeFromSuperview()
         let index = bubbles.index(where: {$0===bubble})
         bubbles.remove(at: index!)
-        print("Popped/deleted! Bubble count: \(count()). Popped bubble:\(index)")
-        
+        print("Popped/deleted! Bubble count: \(count). Popped bubble:\(index)")
     }
 
     
