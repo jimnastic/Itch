@@ -11,11 +11,12 @@ import AVFoundation
 
 
 
-class UIBubble: Bubble {
+class UIBubble {
     // represents a bubble on the screen
     // also inherits isPopped()->Bool and pop()
     
     var view: UIView
+    var bubble = Bubble()
     var centerX: Int = 0 //x position of center of the bubble
     var centerY: Int = 0 //y position of center of the bubble
     var radius: Int = 0  // radius of bubble
@@ -35,9 +36,9 @@ class UIBubble: Bubble {
         }
     }
     
-    override func pop(){
+    func pop(){
     //pop a bubble
-        super.pop()
+        bubble.pop()
         
         let systemSoundID: SystemSoundID = 1057 //tick
         // popcorn:1013 tweet: 1016
@@ -62,7 +63,7 @@ class UIBubble: Bubble {
     //test if a touch (swipe or tap) is in a bubble
     // also tests if this is the first entry into a bubble or previous was outside
         
-        if self.isPopped() {
+        if bubble.isPopped() {
             return (false, false)
         } else {
             let frame = view.frame

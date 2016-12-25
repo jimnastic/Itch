@@ -13,6 +13,11 @@ class Bubble {
     var popped:Bool = false
     
 
+    init() {
+        popped = false
+    }
+
+    
     func pop(){
         popped = true
     }

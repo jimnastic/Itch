@@ -22,7 +22,7 @@ struct gameSettings{
     static var initialBubbles = 6 // sets the number of bubbles to add during setup
     static var maxBubbles = 12 // sets the seconds before new bubble spawned
     static var timerInterval = 10 // sets the seconds before new bubble spawned
-    static var respawning = false // new bubbles created on timer
+    static var respawning = true // new bubbles created on timer
 }
 
 var bubbleWrap: UIBubbleWrap?
